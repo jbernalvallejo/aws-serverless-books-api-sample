@@ -24,7 +24,7 @@ Application is an RESTful API around the book resource. It currently supports an
 
 ## Requirements
 
-* Node.js 16
+* Node.js 14
 * npm 8.19
 * [AWS SAM CLI 1.61.0](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html). It requires you to set AWS credentials so that it can make calls to AWS services on your behalf.
 * Set the AWS region you want to deploy this application to. You can do so through `aws configure` or `AWS_DEFAULT_REGION` environment variable.

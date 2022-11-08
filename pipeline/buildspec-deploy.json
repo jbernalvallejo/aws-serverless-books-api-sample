@@ -1,5 +1,5 @@
 {
-    "version": "0.2",
+    "version": 0.2,
     "env": {
       "exported-variables": [
         "API_ENDPOINT",
@@ -11,7 +11,7 @@
     "phases": {
       "install": {
         "runtime-versions": {
-          "python": "3.8"
+          "python": 3.8
         },
         "commands": [
           "pip3 install --upgrade aws-sam-cli"

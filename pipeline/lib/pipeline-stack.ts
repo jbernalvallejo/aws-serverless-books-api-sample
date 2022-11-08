@@ -15,7 +15,7 @@ export class PipelineStack extends cdk.Stack {
 
     // Source
     const gitRepo = "aws-serverless-books-api-sample";
-    const gitOwner = "aws-samples";
+    const gitOwner = "jbernalvallejo";
     const gitBranch = "main";
     
     // Git Connection
@@ -53,7 +53,7 @@ export class PipelineStack extends cdk.Stack {
     const buildProject = new codebuild.PipelineProject(this, 'CiCdBuild', {
       buildSpec: codebuild.BuildSpec.fromSourceFilename('pipeline/buildspec.json'),
       environment: {
-        buildImage: codebuild.LinuxBuildImage.STANDARD_3_0
+        buildImage: codebuild.LinuxBuildImage.STANDARD_5_0
       },
       projectName: 'books-api-build'
     });
@@ -77,7 +77,7 @@ export class PipelineStack extends cdk.Stack {
     const deployProject = new codebuild.PipelineProject(this, 'CiCdDeploy', {
       buildSpec: codebuild.BuildSpec.fromSourceFilename('pipeline/buildspec-deploy.json'),
       environment: {
-        buildImage: codebuild.LinuxBuildImage.STANDARD_3_0
+        buildImage: codebuild.LinuxBuildImage.STANDARD_5_0
       },
       projectName: 'books-api-deploy'
     });
@@ -109,7 +109,7 @@ export class PipelineStack extends cdk.Stack {
     const testProject = new codebuild.PipelineProject(this, 'CiCdTest', {
       buildSpec: codebuild.BuildSpec.fromSourceFilename('pipeline/buildspec-test.json'),
       environment: {
-        buildImage: codebuild.LinuxBuildImage.STANDARD_3_0
+        buildImage: codebuild.LinuxBuildImage.STANDARD_5_0
       },
       projectName: 'books-api-test'
     });
