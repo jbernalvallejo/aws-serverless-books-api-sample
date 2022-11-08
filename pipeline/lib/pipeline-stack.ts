@@ -4,7 +4,7 @@ import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 
 
-import { CodeBuildAction, GitHubSourceAction, ManualApprovalAction } from '@aws-cdk/aws-codepipeline-actions';
+import { CodeBuildAction, ManualApprovalAction } from '@aws-cdk/aws-codepipeline-actions';
 import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
 
 export class PipelineStack extends cdk.Stack {
@@ -12,17 +12,16 @@ export class PipelineStack extends cdk.Stack {
     super(scope, id, props);
 
     const accountId = this.account;
-    const region = this.region;
 
     // Source
-    const gitRepo = "GIT_REPO_NAME"
-    const gitOwner = "GIT_REPO_OWNER"
-    const gitBranch = "GIT_BRANCH"
+    const gitRepo = "aws-serverless-books-api-sample";
+    const gitOwner = "aws-samples";
+    const gitBranch = "main";
     
     // Git Connection
     // Reference: https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html
-    const gitConnectionRegion = "ap-southeast-1"
-    const gitConnectionId = "XXXXX" 
+    const gitConnectionRegion = "eu-west-1";
+    const gitConnectionId = "d54c24ad-213c-4bc9-a4dd-f2e46342c948";
 
     // Bucket for pipeline artifacts
     const pipelineArtifactBucket = new Bucket(this, 'CiCdPipelineArtifacts', {
