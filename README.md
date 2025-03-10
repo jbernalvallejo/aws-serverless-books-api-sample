@@ -7,6 +7,7 @@ For CI/CD it assumes there are two environments: staging and production. Pipelin
 **Table of contents:**
 
 - [Architecture](#architecture)
+- [Application Flow Diagram](#application-flow-diagram)
 - [Requirements](#requirements)
 - [Project Structure](#project-structure)
 - [Using SAM to deploy the app](#using-sam-to-deploy-the-app)
@@ -21,6 +22,37 @@ For CI/CD it assumes there are two environments: staging and production. Pipelin
 Application is an RESTful API around the book resource. It currently supports an endpoint for registering new books and another one for retrieving them. This API is implemented using Amazon API Gateway and AWS Lambda where authentication is provided by Amazon Cognito. Amazon DynamoDB is the chosen data store.
 
 ![Architecture](images/architecture.png)
+
+## Application Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Cognito
+    participant APIGateway
+    participant Lambda
+    participant DynamoDB
+
+    %% Create Book Flow
+    Client->>Cognito: 1. Authenticate
+    Cognito-->>Client: 2. Return JWT Token
+    Client->>APIGateway: 3. POST /books (with JWT)
+    APIGateway->>Cognito: 4. Validate Token
+    Cognito-->>APIGateway: 5. Token Valid
+    APIGateway->>Lambda: 6. Invoke CreateBook
+    Lambda->>DynamoDB: 7. Store Book Data
+    DynamoDB-->>Lambda: 8. Confirm Storage
+    Lambda-->>APIGateway: 9. Return Success
+    APIGateway-->>Client: 10. 201 Created
+
+    %% Get Books Flow
+    Client->>APIGateway: 11. GET /books
+    APIGateway->>Lambda: 12. Invoke GetAllBooks
+    Lambda->>DynamoDB: 13. Scan Books Table
+    DynamoDB-->>Lambda: 14. Return Books
+    Lambda-->>APIGateway: 15. Return Books List
+    APIGateway-->>Client: 16. 200 OK with Books
+```
 
 ## Requirements
 
