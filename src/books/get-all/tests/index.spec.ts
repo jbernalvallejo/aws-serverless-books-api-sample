@@ -66,6 +66,7 @@ describe('get all book tests', () => {
       expect(book).to.have.property('publisher', 'c');
       expect(book).to.have.property('rating', 5);
       expect(book).to.have.property('pages', 100);
+      expect(book).to.have.property('copyright', true);
     }
   });
 

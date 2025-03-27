@@ -9,6 +9,7 @@ Parameters:
     Type: String
     Description: Stage to deploy resources to
     AllowedValues:
+      - dev
       - staging
       - production
 
@@ -83,7 +84,7 @@ Resources:
       Handler: index.handler
       AutoPublishAlias: !Ref Stage
       DeploymentPreference:
-        Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]        
+        Type: !If [IsProduction, Linear25PercentEveryMinute, AllAtOnce]        
         Alarms:
           - !Ref GetAllBooksAliasErrorMetricGreaterThanZeroAlarm
       Environment:
@@ -118,7 +119,7 @@ Resources:
       Handler: index.handler
       AutoPublishAlias: !Ref Stage
       DeploymentPreference:
-        Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]
+        Type: !If [IsProduction, Linear25PercentEveryMinute, AllAtOnce]
         Hooks:
           PreTraffic: !Ref CreateBookPreTraffic
         Alarms:
@@ -145,6 +146,18 @@ Resources:
                   - !Ref 'AWS::NoValue'
                   - aws.cognito.signin.user.admin
               Authorizer: CognitoAuth
+
+  CustomDeploymentConfig:
+    Type: AWS::CodeDeploy::DeploymentConfig
+    Condition: IsProduction
+    Properties:
+      DeploymentConfigName: Linear25PercentEveryMinute
+      ComputePlatform: Lambda
+      TrafficRoutingConfig:
+        Type: TimeBasedLinear
+        TimeBasedCanary:
+          CanaryPercentage: 25
+          CanaryInterval: 1
 
   BooksTable:
     Type: AWS::Serverless::SimpleTable

@@ -37,7 +37,8 @@ async function handler(): Promise<APIGatewayProxyResult> {
       author: item['author'].S,
       publisher: item['publisher'].S,
       rating: parseInt(item['rating'].N!, 10),
-      pages: parseInt(item['pages'].N!, 10)
+      pages: parseInt(item['pages'].N!, 10),
+      copyright: true
     }));
 
     response = {
