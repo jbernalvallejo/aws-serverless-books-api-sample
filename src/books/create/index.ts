@@ -22,6 +22,7 @@ if (process.env.AWS_SAM_LOCAL) {
 async function handler(event: any): Promise<APIGatewayProxyResult> {
   let response: APIGatewayProxyResult;
   try {
+    console.log('Event: ', event);
     const client = new AWS.DynamoDB(ddbOptions);
 
     const book = JSON.parse(event.body);
