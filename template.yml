@@ -101,7 +101,43 @@ Resources:
             Method: get
             RestApiId:
               Ref: BooksApi
-  
+
+  GetBook:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Format: cjs
+        Minify: true
+        Target: "es2020"
+        Sourcemap: false
+        EntryPoints:
+          - index.ts
+    Properties:
+      FunctionName: !Sub '${Stage}-books-get'
+      CodeUri: src/books/get-by-isbn/
+      Handler: index.handler
+      AutoPublishAlias:
+        Ref: Stage
+      DeploymentPreference:
+        Type: !If [IsProduction, Linear10PercentEvery1Minute, AllAtOnce]
+        Alarms:
+          - !Ref GetBookAliasErrorMetricGreaterThanZeroAlarm
+      Environment:
+        Variables:
+          TABLE: !Ref BooksTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref BooksTable
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /books/{isbn}
+            Method: get
+            RestApiId:
+              Ref: BooksApi
+
   CreateBook:
     Type: AWS::Serverless::Function
     Metadata:
@@ -272,6 +308,23 @@ Resources:
           Value: !Sub '${CreateBook}:${Stage}'
         - Name: FunctionName
           Value: !Ref CreateBook
+      EvaluationPeriods: 2
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: 0
+
+  GetBookAliasErrorMetricGreaterThanZeroAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Lambda Function Error > 0
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Resource
+          Value: !Sub '${GetBook}:${Stage}'
+        - Name: FunctionName
+          Value: !Ref GetBook
       EvaluationPeriods: 2
       MetricName: Errors
       Namespace: AWS/Lambda

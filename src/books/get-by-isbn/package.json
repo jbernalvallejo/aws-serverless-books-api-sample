@@ -1,0 +1,38 @@
+{
+  "name": "books-get-by-isbn",
+  "version": "1.0.0",
+  "description": "Lambda function to get a single book by isbn",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha -r ts-node/register ./tests/*.spec.ts"
+  },
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11 <12"
+  },
+  "author": "Amazon Web Services",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/chai": "^4.3.17",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.5",
+    "@types/uuid": "^10.0.0",
+    "aws-sdk-client-mock": "^4.1.0",
+    "chai": "^4.2.0",
+    "mocha": "^11.7.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "uuid": "^11.1.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.840.0",
+    "esbuild": "^0.25.1",
+    "aws-xray-sdk-core": "^3.10.3"
+  },
+  "overrides": {
+    "diff": "^9.0.0",
+    "serialize-javascript": "^7.0.6"
+  }
+}
